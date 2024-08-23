@@ -26,8 +26,22 @@
 </head>
 
 <body>
+    <div class="profile-section">
+        <div class="profile-dropdown">
+            <img id="profile-picture" src="default-avatar.png" alt="Profile Picture" class="profile-img">
+            <span id="profile-name">Anonymous</span>
+        </div>
+        <div id="dropdown-menu" class="dropdown-content">
+            <button id="login-button">Login</button>
+            <button id="saves-button" style="display: none;">Saves</button>
+        </div>
+    </div>
 
+    <!-- Google -->
+    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-auth-compat.js"></script>
 
+    <!-- Locale -->
     <script src="Assets/Scripts/index.js"></script>
 </body>
 

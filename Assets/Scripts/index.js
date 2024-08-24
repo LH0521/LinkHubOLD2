@@ -17,13 +17,41 @@ const savesButton = document.getElementById('saves-button');
 const auth = firebase.auth();
 const provider = new firebase.auth.GoogleAuthProvider();
 
-loginButton.addEventListener('click', () => {
-    auth.signInWithPopup(provider).then((result) => {
-        const user = result.user;
-        profilePicture.src = user.photoURL;
-        profileName.textContent = user.displayName;
-        savesButton.style.display = 'block';
-    }).catch((error) => {
-        console.error('Error during login:', error);
-    });
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        updateUIForLoggedInUser(user);
+    } else {
+        resetUIForAnonymousUser();
+    }
 });
+
+loginButton.addEventListener('click', () => {
+    if (auth.currentUser) {
+        auth.signOut().then(() => {
+            resetUIForAnonymousUser();
+        }).catch((error) => {
+            console.error('Error during logout:', error);
+        });
+    } else {
+        auth.signInWithPopup(provider).then((result) => {
+            const user = result.user;
+            updateUIForLoggedInUser(user);
+        }).catch((error) => {
+            console.error('Error during login:', error);
+        });
+    }
+});
+
+function updateUIForLoggedInUser(user) {
+    profilePicture.src = user.photoURL;
+    profileName.textContent = user.displayName;
+    loginButton.textContent = 'Logout';
+    savesButton.style.display = 'block';
+}
+
+function resetUIForAnonymousUser() {
+    profilePicture.src = 'Assets/Images/default-avatar.png';
+    profileName.textContent = 'Anonymous';
+    loginButton.textContent = 'Login';
+    savesButton.style.display = 'none';
+}
